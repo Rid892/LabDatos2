@@ -2,11 +2,11 @@
 
 ## 📌 Descripción
 
-Este proyecto implementa un **grafo simple, no dirigido y ponderado** que modela rutas de transporte aéreo entre aeropuertos del mundo.
+El presente proyecto consiste en la construcción de un grafo simple, no dirigido y ponderado, el cual modela rutas de transporte aéreo a partir de un conjunto de datos reales.
 
-Cada vértice representa un aeropuerto y cada arista representa una conexión entre dos aeropuertos, cuyo peso corresponde a la **distancia geográfica calculada mediante la fórmula de Haversine**.
+Cada vértice representa un aeropuerto, mientras que las aristas representan conexiones entre estos, cuyo peso corresponde a la distancia geográfica calculada mediante la fórmula de Haversine.
 
-El sistema permite analizar propiedades del grafo y ejecutar algoritmos clásicos de teoría de grafos como:
+A partir de este modelo, se implementan diferentes algoritmos fundamentales de teoría de grafos, permitiendo analizar propiedades estructurales del grafo y resolver problemas como:
 
 * Conectividad
 * Bipartición
@@ -17,10 +17,11 @@ El sistema permite analizar propiedades del grafo y ejecutar algoritmos clásico
 
 ## 🧠 Objetivos
 
-* Modelar un problema real mediante grafos
-* Implementar algoritmos sin uso de librerías externas
-* Aplicar estructuras de datos en un contexto práctico
-* Visualizar información geográfica de aeropuertos
+- Modelar un sistema real utilizando estructuras de datos basadas en grafos.
+- Implementar algoritmos clásicos sin el uso de librerías externas.
+- Analizar propiedades del grafo como conectividad y bipartición.
+- Aplicar algoritmos de optimización como Dijkstra y Kruskal.
+- Integrar una interfaz gráfica para facilitar la interacción con el sistema.
 
 ---
 
@@ -139,6 +140,21 @@ Se utiliza la fórmula de Haversine para calcular la distancia entre dos coorden
 * Se usa como peso de las aristas del grafo
 
 ---
+
+
+## ⚠️ Implementación de algoritmos
+
+Todos los algoritmos utilizados en este proyecto fueron implementados manualmente, sin el uso de librerías externas especializadas.
+
+Entre los algoritmos implementados se encuentran:
+
+- Búsqueda en anchura (BFS) para conectividad
+- Verificación de bipartición
+- Algoritmo de Kruskal para el árbol de expansión mínima
+- Algoritmo de Dijkstra para caminos mínimos
+
+Esto garantiza la comprensión y aplicación directa de los conceptos estudiados en el curso.
+
 
 ## ▶️ Cómo ejecutar el proyecto
 
