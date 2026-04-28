@@ -178,18 +178,6 @@ http://localhost:8501
 
 ---
 
-## ⚠️ Restricciones
-
-* No se utilizaron librerías externas para:
-
-  * Conectividad
-  * Caminos mínimos
-  * MST
-  * Bipartición
-
-Todos los algoritmos fueron implementados manualmente.
-
----
 
 ## 👥 Integrantes
 
