@@ -200,7 +200,7 @@ Universidad del Norte
 
 ---
 
-💡 Análisis y Resultados
+## 💡 Análisis y Resultados
 
 Optimización de Memoria: El uso de listas de adyacencia permite manejar el dataset de vuelos de forma eficiente, con una complejidad espacial de O(V + E).
 Rutas Dinámicas: La implementación de Dijkstra garantiza encontrar el camino más corto en kilómetros, optimizando la logística aérea entre nodos lejanos.
