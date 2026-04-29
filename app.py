@@ -1,3 +1,17 @@
+"""
+app.py
+
+Aplicación principal del laboratorio de grafos de rutas aéreas.
+
+Este archivo construye la interfaz gráfica usando Streamlit y permite ejecutar
+las funcionalidades solicitadas en el laboratorio:
+- Verificar conexidad del grafo.
+- Verificar si la componente más grande es bipartita.
+- Calcular el árbol de expansión mínima con Kruskal.
+- Consultar aeropuertos más lejanos usando Dijkstra.
+- Visualizar en un mapa el camino mínimo entre dos aeropuertos.
+"""
+
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
@@ -11,7 +25,16 @@ st.set_page_config(page_title="Rutas Aéreas - Estructura de Datos 2", layout="w
 
 @st.cache_resource
 def load_graph():
-    # Cargar grafo en memoria usando caché para no reprocesar en cada rerun de Streamlit
+    """
+    Carga el grafo desde el archivo CSV y lo mantiene en caché.
+
+    Streamlit vuelve a ejecutar el script cada vez que el usuario interactúa con
+    la interfaz. Por eso se usa cache_resource, evitando reconstruir el grafo en
+    cada interacción.
+
+    Retorna:
+        FlightGraph: Grafo construido a partir de flights_final.csv.
+    """
     g = FlightGraph()
     data_path = os.path.join("data", "flights_final.csv")
     if os.path.exists(data_path):
@@ -20,8 +43,18 @@ def load_graph():
 
 def render_map(graph, path_nodes=None):
     """
-    Renderiza un mapa global de Folium con marcadores de aeropuertos de interés
-    e ilustra el 'path_nodes' en caso de enviarse.
+    Renderiza un mapa con la ruta mínima entre dos aeropuertos.
+
+    Si se recibe una lista de vértices en path_nodes, se dibujan marcadores para
+    el origen, el destino y los vértices intermedios. Además, se traza una línea
+    que representa el camino calculado.
+
+    Parámetros:
+        graph (FlightGraph): Grafo con la información de los aeropuertos.
+        path_nodes (list | None): Lista de códigos de aeropuertos que forman el camino.
+
+    Retorna:
+        folium.Map: Mapa generado con Folium.
     """
     # Centrar en una posición neutral
     m = folium.Map(location=[20, 0], zoom_start=2)
@@ -53,6 +86,12 @@ def render_map(graph, path_nodes=None):
     return m
 
 def main():
+    """
+    Función principal de la aplicación.
+
+    Construye la interfaz de usuario, carga el grafo y muestra las secciones
+    correspondientes a cada requisito del laboratorio.
+    """
     st.title("Sistema Experimental de Rutas Aéreas (Grafo)")
     st.write("Laboratorio de Análisis de Grafos de Transporte Aéreo.")
 
@@ -65,6 +104,12 @@ def main():
     # Operaciones pesadas cacheadas on-demand
     @st.cache_data
     def get_components_data():
+        """
+        Calcula y almacena en caché las componentes conexas del grafo.
+
+        Esta operación puede ser costosa porque recorre el grafo completo.
+        Al cachearla, se evita recalcularla cada vez que cambia la interfaz.
+        """
         return find_components(graph)
         
     sidebar_menu = st.sidebar.radio("Navegación / Requisitos:", [

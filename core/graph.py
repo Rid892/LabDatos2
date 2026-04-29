@@ -1,8 +1,37 @@
+"""
+Módulo graph.py
+
+Este módulo contiene la estructura principal del grafo de rutas aéreas.
+El grafo se construye a partir del archivo flights_final.csv, donde cada
+vértice representa un aeropuerto y cada arista representa una ruta entre dos
+aeropuertos.
+
+El grafo es:
+- Simple: no se guardan aristas repetidas entre el mismo par de aeropuertos.
+- No dirigido: si existe una ruta A-B, también se considera B-A.
+- Ponderado: el peso de cada arista es la distancia geográfica entre aeropuertos.
+"""
+
 import csv
 import math
 
 # Haversine formula to calculate the distance between two geographical points
 def haversine_distance(lat1, lon1, lat2, lon2):
+    """
+    Calcula la distancia aproximada en kilómetros entre dos puntos geográficos.
+
+    Se utiliza la fórmula de Haversine, que permite estimar la distancia entre
+    dos coordenadas sobre la superficie de la Tierra usando latitud y longitud.
+
+    Parámetros:
+        lat1 (float): Latitud del primer punto.
+        lon1 (float): Longitud del primer punto.
+        lat2 (float): Latitud del segundo punto.
+        lon2 (float): Longitud del segundo punto.
+
+    Retorna:
+        float: Distancia aproximada entre los dos puntos en kilómetros.
+    """
     R = 6371.0 # Radio de la Tierra en kilómetros
     
     phi1 = math.radians(lat1)
@@ -20,7 +49,27 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     return distance
 
 class FlightGraph:
+    """
+    Representa un grafo de aeropuertos y rutas aéreas.
+
+    Atributos:
+        adj_list (dict): Lista de adyacencia del grafo. La estructura es:
+            {
+                'BOG': {'MDE': peso, 'CLO': peso},
+                ...
+            }
+
+        airports (dict): Diccionario con la información de cada aeropuerto.
+            La llave es el código del aeropuerto y el valor contiene sus datos.
+    """
     def __init__(self):
+        """
+        Inicializa un grafo vacío.
+
+        Se crean dos diccionarios:
+        - adj_list: guarda las conexiones entre aeropuertos.
+        - airports: guarda la información descriptiva de cada aeropuerto.
+        """
         # self.adj_list: dict[str, dict[str, float]]
         # Mapa de código de aeropuerto a un diccionario de destinos y pesos
         self.adj_list = {}
@@ -30,6 +79,20 @@ class FlightGraph:
         self.airports = {}
         
     def add_airport(self, code, name, city, country, lat, lon):
+        """
+        Agrega un aeropuerto al grafo si aún no existe.
+
+        Parámetros:
+            code (str): Código del aeropuerto.
+            name (str): Nombre del aeropuerto.
+            city (str): Ciudad donde se encuentra el aeropuerto.
+            country (str): País donde se encuentra el aeropuerto.
+            lat (float | str): Latitud geográfica.
+            lon (float | str): Longitud geográfica.
+
+        Retorna:
+            None
+        """
         if code not in self.airports:
             self.airports[code] = {
                 'code': code,
@@ -43,6 +106,20 @@ class FlightGraph:
                 self.adj_list[code] = {}
 
     def add_edge(self, source, dest, weight):
+        """
+        Agrega una arista no dirigida entre dos aeropuertos.
+
+        Como el grafo es no dirigido, se registra la conexión en ambos sentidos:
+        source -> dest y dest -> source.
+
+        Parámetros:
+            source (str): Código del aeropuerto origen.
+            dest (str): Código del aeropuerto destino.
+            weight (float): Peso de la arista, correspondiente a la distancia.
+
+        Retorna:
+            None
+        """
         # Es un grafo no dirigido simple
         if dest not in self.adj_list[source]:
             self.adj_list[source][dest] = weight
@@ -50,6 +127,21 @@ class FlightGraph:
             self.adj_list[dest][source] = weight
 
     def load_from_csv(self, filepath):
+        """
+        Carga los datos de aeropuertos y rutas desde un archivo CSV.
+
+        Por cada fila del dataset:
+        1. Se extrae el aeropuerto origen.
+        2. Se extrae el aeropuerto destino.
+        3. Se calcula la distancia entre ambos usando Haversine.
+        4. Se agrega la arista al grafo si no existe previamente.
+
+        Parámetros:
+            filepath (str): Ruta del archivo CSV que contiene los vuelos.
+
+        Retorna:
+            None
+        """
         with open(filepath, mode='r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
@@ -86,9 +178,24 @@ class FlightGraph:
                     self.add_edge(src_code, dst_code, distance)
 
     def get_vertices(self):
+        """
+        Obtiene todos los vértices del grafo.
+
+        Retorna:
+            list: Lista con los códigos de todos los aeropuertos registrados.
+        """
         return list(self.adj_list.keys())
 
     def get_edges(self):
+        """
+        Obtiene todas las aristas del grafo sin repetirlas.
+
+        Como el grafo es no dirigido, una conexión A-B aparece internamente como
+        A -> B y B -> A. Por eso se usa un conjunto auxiliar para evitar duplicados.
+
+        Retorna:
+            list: Lista de tuplas con formato (origen, destino, peso).
+        """
         # Retorna todas las aristas (u, v, peso) evitando duplicados
         edges = []
         visited = set()

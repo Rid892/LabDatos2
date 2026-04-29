@@ -1,3 +1,4 @@
+#Requisitos para el programa (Instalar en la terminal)
 streamlit
 folium
 streamlit-folium
